@@ -17,5 +17,12 @@ pipeline {
                 """
             }
         }
+        stage('Run Docker Image') {
+            steps {
+                sh """
+                docker run -d -p 9080:9080 --name ${DOCKER_IMAGE} ${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
+            }
+        }
     }
 }
