@@ -12,8 +12,8 @@ pipeline {
         }
         stage('Set Default docker context') {
             steps {
-                """
-                sh 'docker context use desktop-linux'
+                sh """
+                docker context use desktop-linux
                 """
             }
         }
