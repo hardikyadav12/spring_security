@@ -10,13 +10,6 @@ pipeline {
                 sh './mvnw clean package'
             }
         }
-        stage('Set Default docker context') {
-            steps {
-                sh """
-                docker context use desktop-linux
-                """
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 sh """
