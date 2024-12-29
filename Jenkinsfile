@@ -7,10 +7,9 @@ pipeline {
                 git url: 'https://github.com/hardikyadav12/spring_security.git', branch: 'main'
             }
         }
-        stage('Build') {
+        stage('Maven Build') {
             steps {
-                // Just echo a message to simulate a build step
-                echo 'Build stage executed!'
+                sh './mvnw clean package'
             }
         }
     }
