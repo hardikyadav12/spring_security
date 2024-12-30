@@ -1,16 +1,34 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_IMAGE = "spring-security-app"
+        DOCKER_TAG = "latest"
+    }
     stages {
-        stage('Clone Repository') {
+        stage('Maven Build') {
             steps {
-                // Clone the GitHub repository
-                git url: 'https://github.com/hardikyadav12/spring_security.git', branch: 'main'
+                sh './mvnw clean package'
             }
         }
-        stage('Build') {
+    stage('SonarQube Analysis') {
+        steps {
+            withSonarQubeEnv('jenkins-sonarqube') { // Use the name you configured
+            sh './mvnw sonar:sonar -Dsonar.projectKey=Spring-Security -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqa_9f7a69849d189ddb70b8864ac25a045d3fe4696a'
+            }
+        }
+    }
+        stage('Build Docker Image') {
             steps {
-                // Just echo a message to simulate a build step
-                echo 'Build stage executed!'
+                sh """
+                docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                """
+            }
+        }
+        stage('Run Docker Image') {
+            steps {
+                sh """
+                docker run -d -p 9080:9080 --name ${DOCKER_IMAGE} ${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
             }
         }
     }
