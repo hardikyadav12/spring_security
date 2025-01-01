@@ -19,6 +19,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class ProjectSecurityConfig {
 
+
     @Autowired @Lazy PasswordEncoder encoder;
 
     @Bean
